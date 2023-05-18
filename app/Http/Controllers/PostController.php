@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PostDetailResource;
 
 class PostController extends Controller
@@ -18,7 +19,7 @@ class PostController extends Controller
     {
         $posts = Post::all();
         // return response()->json(['datas' => $post]);
-        return PostResource::collection($posts);
+        return PostDetailResource::collection($posts->loadMissing('writer:id,username'));
 
     }
 
@@ -40,7 +41,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi data yang diterima
+        $request['author'] = Auth::user()->id;
+        $validated = $request->validate([
+            'title' => 'required|unique:posts|max:255',
+            'news_content' => 'required',
+            'author' => 'required'
+        ]);
+
+
+         $post = Post::create($request->all());
+         return new PostDetailResource($post->loadMissing('writer:id,username'));
     }
 
     /**
