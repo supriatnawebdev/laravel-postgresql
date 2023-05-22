@@ -20,7 +20,7 @@ class PostController extends Controller
     {
         $posts = Post::all();
         // return response()->json(['datas' => $post]);
-        return PostDetailResource::collection($posts->loadMissing('writer:id,username'));
+        return PostDetailResource::collection($posts->loadMissing('writer:id,username', 'comments'));
 
     }
 

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PostDetailResource extends JsonResource
+class CommentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,18 +14,16 @@ class PostDetailResource extends JsonResource
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
-
     {
+
         $created_at = $this->created_at ? Carbon::parse($this->created_at)->format('Y-m-d H:i:s') : null;
         return [
-
             'id' => $this->id,
-            'title' => $this->title,
-            'news_content' => $this->news_content,
+            'post_id' => $this->post_id,
+            'user_id' => $this->user_id,
+            'comments_content' => $this->comments_content,
             'created_at' => $created_at,
-            'author' => $this->author,
-            'writer' => $this->writer,
-            'comments' => $this->comments
+            'commentator' => $this->commentator,
 
         ];
     }
